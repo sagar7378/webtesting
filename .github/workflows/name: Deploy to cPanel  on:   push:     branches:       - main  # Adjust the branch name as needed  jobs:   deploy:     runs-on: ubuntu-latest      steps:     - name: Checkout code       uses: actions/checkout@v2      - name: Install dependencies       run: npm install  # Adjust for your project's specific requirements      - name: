@@ -1,5 +1,4 @@
-
-name: Deploy to cPanel
+name: Deploy to cPanel via FTP
 
 on:
   push:
@@ -14,7 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: npm install  # Adjust for your project's specific requirements
+    - name: Install FTP client
+      run: sudo apt-get install ftp  # Install FTP client on Ubuntu
 
-    - name:
+    - name: Deploy via FTP
+      run: |
+        ftp -n <<EOF
+        open yourcpanelhost.com
+        user  rajainfo@test.rajainfotech.in ]8qj4e7CP]TQ
+        binary  # Use binary mode for transferring non-text files
+        cd /path/to/destination/folder
+        mput -r ./dist/*  # Upload all files from the dist folder
+        bye
+        EOF
